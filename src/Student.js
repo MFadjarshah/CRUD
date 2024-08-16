@@ -1,12 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function Student() {
+  //To display the data
+  const [student, setStudent] = useState([]);
+
   //Fetch data from API database using Axios
   useEffect(() => {
     axios
       .get("http://localhost:8081/")
-      .then((res) => console.log(res))
+      // .then((res) => console.log(res))
+      .then((res) => setStudent(res.data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -17,11 +21,21 @@ function Student() {
         <table className="table">
           <thead>
             <tr>
+              {/* <th>ID</th> */}
               <th>Name</th>
               <th>Email</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            {/* Display using map function */}
+            {student.map((data, i) => (
+              <tr key={i}>
+                {/* <td>{data.ID}</td> */}
+                <td>{data.Name}</td>
+                <td>{data.Email}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
