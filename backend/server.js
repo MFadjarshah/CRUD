@@ -56,17 +56,28 @@ app.put("/update/:id", (req, res) => {
   const values = [req.body.name, req.body.email];
   const id = req.params.id;
 
-  //   //CODE from chatgpt
-  //   db.query(sql, [...values, id], (err, data) => {
-  //     if (err) {
-  //       console.error("Error executing query:", err);
-  //       return res.status(500).json(err); // Return status 500 for server errors
-  //     }
-  //     return res.status(200).json(data); // Return status 200 for successful update
-  //   });
-  // });
-
   db.query(sql, [...values, id], (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+//   //CODE from chatgpt
+//   db.query(sql, [...values, id], (err, data) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       return res.status(500).json(err); // Return status 500 for server errors
+//     }
+//     return res.status(200).json(data); // Return status 200 for successful update
+//   });
+// });
+
+//DELETE method
+app.delete("/student/:id", (req, res) => {
+  const sql = "DELETE FROM student WHERE ID=?";
+  const id = req.params.id;
+
+  db.query(sql, [id], (err, data) => {
     if (err) return res.json(err);
     return res.json(data);
   });
