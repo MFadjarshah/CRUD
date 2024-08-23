@@ -50,6 +50,9 @@ function Student() {
                   <Link to={`update/${data.ID}`} className="btn btn-primary">
                     Update
                   </Link>
+                  <Link to={`view/${data.ID}`} className="btn btn-success ms-2">
+                    View
+                  </Link>
                   <button
                     className="btn btn-danger ms-2"
                     onClick={(e) => handleDelete(data.ID)}

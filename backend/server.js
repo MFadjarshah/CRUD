@@ -26,6 +26,18 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/:id", (req, res) => {
+  const id = req.params.id;
+  // Logic to find the student by ID and return it
+  // Example:
+  const student = database.find((student) => student.id === parseInt(id));
+  if (student) {
+    res.json(student);
+  } else {
+    res.status(404).send("Student not found");
+  }
+});
+
 //POST method
 app.post("/create", (req, res) => {
   const sql = "INSERT INTO student (`Name`, `Email`) VALUES (?, ?)";
