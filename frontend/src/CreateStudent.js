@@ -2,23 +2,38 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
+
 function CreateStudent() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Loading State
 
   function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
+    if (!name || !email) {
+      alert("Please fill in both name and email.");
+      return;
+    }
     // Use axios library to past the data
     axios
-      .post("http://localhost:8081/create", { name, email })
+      .post(`${API_URL}/create`, { name, email })
       .then((res) => {
         console.log(res);
-        //   Navigate back to home
+        // Navigate back to home
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        alert("Failed to create student. Please try again."); // Consider displaying error messages
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
+
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
       <div className="w-50 bg-white rounded p-3">
@@ -42,7 +57,9 @@ function CreateStudent() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <button className="btn btn-success">Submit</button>
+          <button className="btn btn-success" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </button>
         </form>
       </div>
     </div>

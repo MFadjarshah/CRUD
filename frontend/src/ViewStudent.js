@@ -1,65 +1,39 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
 
 function ViewStudent() {
-  // Initialise State Variable to store the fetched data
-  //   const [student, setStudent] = useState({});
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-
-  // Fetch Student Data Using "useEffect"
-  // To get the ID we useParams
-  const { id } = useParams();
-  //   const navigate = useNavigate();
+  const [student, setStudent] = useState(null); // Initialize with null (data might not be immediately available)
+  const { id } = useParams(); // Get the student ID from URL parameters
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8081/${id}`)
-      //   .then((res) => console.log(res))
-      .then((res) => {
-        setName(res.data.name);
-        setEmail(res.data.email);
-      })
+      .get(`${API_URL}/view/${id}`)
+      .then((res) => setStudent(res.data))
       .catch((err) => console.log(err));
   }, [id]);
 
-  //   function handleSubmit(event) {
-  //     event.preventDefault();
-  //     // Use axios library to past the data
-  //     axios
-  //       .put("http://localhost:8081/update/" + id, { name, email })
-  //       .then((res) => {
-  //         console.log(res);
-  //         //   Navigate back to home
-  //         navigate("/");
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
+  if (!student) return <p>Loading...</p>; // Display a loading message while fetching data
+
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
       <div className="w-50 bg-white rounded p-3">
         <form>
-          <h2>Info Student</h2>
+          <h2>Student Details</h2>
           <div className="mb-2">
-            <label htmlFor="">Name: {name}</label>
-            {/* <input
-              type="text"
-              placeholder="Enter Name"
-              className="form-control"
-              onChange={(e) => setName(e.target.value)}
-            /> */}
+            <label>Name: {student.Name}</label>
           </div>
           <div className="mb-2">
-            <label htmlFor="">Email: {email}</label>
-            {/* <input
-              type="email"
-              placeholder="Enter Email"
-              className="form-control"
-              onChange={(e) => setEmail(e.target.value)}
-            /> */}
+            <label>Email: {student.Email}</label>
           </div>
-          <button className="btn btn-success">Update</button>
+          <button
+            className="btn btn-primary"
+            onClick={() => window.history.back()}
+          >
+            Go Back
+          </button>
         </form>
       </div>
     </div>

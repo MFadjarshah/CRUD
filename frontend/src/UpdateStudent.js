@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
 
 function UpdateStudent() {
   const [name, setName] = useState("");
@@ -8,18 +10,41 @@ function UpdateStudent() {
   //To get the ID we useParams
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Loading State
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/student/${id}`)
+      .then((res) => {
+        setName(res.data.name);
+        setEmail(res.data.email);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
 
   function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
+    if (!name || !email) {
+      // To ensure that both fields are not empty before submit
+      alert("Please fill in both name and email.");
+      return;
+    }
     // Use axios library to past the data
     axios
-      .put("http://localhost:8081/update/" + id, { name, email })
+      .put(`${API_URL}/student/${id}`, { name, email })
       .then((res) => {
         console.log(res);
         //   Navigate back to home
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        alert("Failed to update student. Please try again."); // Display error messages to the user if the update request fails.
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
@@ -44,7 +69,9 @@ function UpdateStudent() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <button className="btn btn-success">Update</button>
+          <button className="btn btn-success" disabled={loading}>
+            {loading ? "Updating..." : "Update"}
+          </button>
         </form>
       </div>
     </div>
