@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
 
 function ViewStudent() {
   const [student, setStudent] = useState(null); // Initialize with null (data might not be immediately available)
   const { id } = useParams(); // Get the student ID from URL parameters
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -30,7 +31,7 @@ function ViewStudent() {
           </div>
           <button
             className="btn btn-primary"
-            onClick={() => window.history.back()}
+            onClick={() => navigate("/")} // Use navigate to go back to the Student page
           >
             Go Back
           </button>
