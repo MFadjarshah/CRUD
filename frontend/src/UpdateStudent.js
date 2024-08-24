@@ -14,10 +14,10 @@ function UpdateStudent() {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/student/${id}`)
+      .get(`${API_URL}/view/${id}`)
       .then((res) => {
-        setName(res.data.name);
-        setEmail(res.data.email);
+        setName(res.data.Name);
+        setEmail(res.data.Email);
       })
       .catch((err) => console.log(err));
   }, [id]);
@@ -32,7 +32,7 @@ function UpdateStudent() {
     }
     // Use axios library to past the data
     axios
-      .put(`${API_URL}/student/${id}`, { name, email })
+      .put(`${API_URL}/update/${id}`, { name, email })
       .then((res) => {
         console.log(res);
         //   Navigate back to home

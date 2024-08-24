@@ -47,7 +47,7 @@ app.post("/create", (req, res) => {
 
 // PUT Method (Update Student)
 app.put("/update/:id", (req, res) => {
-  const sql = "UPDATE student SET Name=?, Email=? WHERE ID=?";
+  const sql = "UPDATE student SET `Name`=?, `Email`=? WHERE ID=?";
   const values = [req.body.name, req.body.email];
   const id = req.params.id;
 
