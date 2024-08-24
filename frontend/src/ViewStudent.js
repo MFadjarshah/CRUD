@@ -8,6 +8,7 @@ function ViewStudent() {
   const [student, setStudent] = useState(null); // Initialize with null (data might not be immediately available)
   const { id } = useParams(); // Get the student ID from URL parameters
   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -31,6 +32,7 @@ function ViewStudent() {
           </div>
           <button
             className="btn btn-primary"
+            onClick={() => navigate("/")} // Use navigate to go back to the Student page
             onClick={() => navigate("/")} // Use navigate to go back to the Student page
           >
             Go Back
